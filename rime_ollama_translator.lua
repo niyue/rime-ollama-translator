@@ -13,9 +13,8 @@ local config = {
     host = "http://127.0.0.1:11434",
     model = "gemma3:1b",
     min_length = 2,
-    timeout = 15,
+    timeout = 5,
     debug = false,  -- Default: no log output
-    debounce_delay = 1.8,
     prompt = "请将中文「%s」翻译成自然口语的日语，仅输出翻译结果，不要解释"
 }
 

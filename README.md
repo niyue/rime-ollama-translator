@@ -110,7 +110,10 @@ Issues and Pull Requests are welcome!
 
 ## Changelog
 
-### v0.1.0
+### v0.2.0 (2025-07-06)
+- Improved performance by introducing the pending query mechanism: only the final stable input triggers a translation request, greatly reducing unnecessary queries and resource usage.
+
+### v0.1.0 (2025-07-06)
 - Initial release
 - Support for Chinese to Japanese translation
 - Implemented caching mechanism
