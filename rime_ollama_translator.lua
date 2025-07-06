@@ -96,7 +96,7 @@ local function ollama_translator_filter(input, env)
                 pending_query[text] = nil
                 table.insert(candidates, 2, Candidate("ollama", first.start, first._end, "🌐 " .. t, ""))
             elseif not pending_query[text] then
-                pending_query[text] = true
+                pending_query[text] = os.time()
                 log("Mark pending: " .. text)
             else
                 pending_query[text] = nil
@@ -110,6 +110,14 @@ local function ollama_translator_filter(input, env)
                     log("Translation failed: " .. tostring(t))
                 end
             end
+        end
+    end
+
+    -- clean pending_query, auto clean the item that not accessed in 1 minute
+    local now = os.time()
+    for k, ts in pairs(pending_query) do
+        if now - ts > 60 then
+            pending_query[k] = nil
         end
     end
 
