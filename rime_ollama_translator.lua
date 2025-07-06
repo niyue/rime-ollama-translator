@@ -83,45 +83,33 @@ local function ollama_translator_filter(input, env)
         table.insert(candidates, cand)
     end
 
-    local max_len = 0
-    for _, cand in ipairs(candidates) do
-        local l = utf8_len(cand.text)
-        if l > max_len then
-            max_len = l
-        end
-    end
-
     if #candidates > 1 then
         local first = candidates[1]
         local text = first.text
         local len = utf8_len(text)
         log("Need translation: " .. text .. " (len=" .. len .. ")")
 
-        if len == max_len then
-            if len >= config.min_length and is_chinese_text(text) then
-                if translation_cache[text] then
-                    local t = translation_cache[text]
-                    log("Using cache: " .. t)
-                    pending_query[text] = nil
+        if len >= config.min_length and is_chinese_text(text) then
+            if translation_cache[text] then
+                local t = translation_cache[text]
+                log("Using cache: " .. t)
+                pending_query[text] = nil
+                table.insert(candidates, 2, Candidate("ollama", first.start, first._end, "🌐 " .. t, ""))
+            elseif not pending_query[text] then
+                pending_query[text] = true
+                log("Mark pending: " .. text)
+            else
+                pending_query[text] = nil
+                local prompt = string.format(config.prompt, text)
+                local t = query_ollama(prompt)
+                if t and t ~= text then
+                    translation_cache[text] = t
                     table.insert(candidates, 2, Candidate("ollama", first.start, first._end, "🌐 " .. t, ""))
-                elseif not pending_query[text] then
-                    pending_query[text] = true
-                    log("Mark pending: " .. text)
+                    log("Do actual query and cache: " .. text)
                 else
-                    pending_query[text] = nil
-                    local prompt = string.format(config.prompt, text)
-                    local t = query_ollama(prompt)
-                    if t and t ~= text then
-                        translation_cache[text] = t
-                        table.insert(candidates, 2, Candidate("ollama", first.start, first._end, "🌐 " .. t, ""))
-                        log("Do actual query and cache: " .. text)
-                    else
-                        log("Translation failed: " .. tostring(t))
-                    end
+                    log("Translation failed: " .. tostring(t))
                 end
             end
-        else
-            log("Skip non-max candidate: " .. text)
         end
     end
 
