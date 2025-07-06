@@ -93,7 +93,7 @@ local function ollama_translator_filter(input, env)
                 local t = translation_cache[text]
                 log("Using cache: " .. t)
                 pending_query[text] = nil
-                table.insert(candidates, 2, Candidate("ollama", first.start, first._end, "🌐 " .. t, ""))
+                table.insert(candidates, 2, Candidate("ollama", first.start, first._end, t, "🌐"))
             elseif not pending_query[text] then
                 pending_query[text] = os.time()
                 log("Mark pending: " .. text)
@@ -103,7 +103,7 @@ local function ollama_translator_filter(input, env)
                 local t = query_ollama(prompt)
                 if t and t ~= text then
                     translation_cache[text] = t
-                    table.insert(candidates, 2, Candidate("ollama", first.start, first._end, "🌐 " .. t, ""))
+                    table.insert(candidates, 2, Candidate("ollama", first.start, first._end, t, "🌐"))
                     log("Do actual query and cache: " .. text)
                 else
                     log("Translation failed: " .. tostring(t))
