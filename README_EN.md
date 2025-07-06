@@ -1,6 +1,10 @@
-# Rime Ollama Translator
+# RIME Ollama Translator
 
-A Rime input method extension based on Ollama that provides real-time Chinese to Japanese translation.
+A [RIME](https://rime.im/) input method extension based on Ollama that provides real-time Chinese to Japanese translation.
+
+Screenshot:
+
+![Screenshot](screenshot.png)
 
 ## Features
 
@@ -12,7 +16,7 @@ A Rime input method extension based on Ollama that provides real-time Chinese to
 
 ## System Requirements
 
-- Rime input method framework
+- RIME input method framework
 - Ollama service (running locally)
 
 ## Installation
@@ -32,14 +36,14 @@ A Rime input method extension based on Ollama that provides real-time Chinese to
    ollama pull gemma3:1b
    ```
 
-3. **Configure Rime**
-   - Copy `rime-ollama-translator.lua` to your Rime configuration directory
-   - Add the following to your Rime configuration file:
+3. **Configure RIME**
+   - Copy `rime_ollama_translator.lua` to your RIME configuration directory
+   - Add the following to your RIME configuration file:
 
    ```yaml
    # Add to your input scheme configuration file
    filters:
-     - lua_translator@ollama_translator
+     - lua_filter@*rime_ollama_translator
    
    # Ensure lua module is loaded
    lua_load:
@@ -48,7 +52,7 @@ A Rime input method extension based on Ollama that provides real-time Chinese to
 
 ## Configuration Options
 
-In the `rime-ollama-translator.lua` file, you can modify the following settings:
+In the `rime_ollama_translator.lua` file, you can modify the following settings:
 
 ```lua
 local config = {
@@ -64,7 +68,7 @@ local config = {
 
 ## Usage
 
-1. Start Rime input method
+1. Start RIME input method
 2. Type Chinese text
 3. When the input length reaches the configured minimum length, Japanese translation candidates will automatically appear
 4. Translation results are marked with 🌐 icon and appear as the second candidate in the list
@@ -73,8 +77,7 @@ local config = {
 
 Theoretically supports any Ollama model. Recommended models:
 - `gemma3:1b` (default, lightweight and fast)
-- `qwen2.5:1.5b` (Chinese-friendly)
-- `llama3.2:1b` (good general performance)
+- `qwen3:1.7b` (Chinese-friendly)
 
 ## Troubleshooting
 

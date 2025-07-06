@@ -1,6 +1,10 @@
-# Rime Ollama 翻译器
+# RIME Ollama 翻译器
 
-一个基于 Ollama 的 Rime 输入法扩展，能够实时将中文翻译成日语。
+一个基于 Ollama 的 [RIME](https://rime.im/) 输入法扩展，能够实时将中文翻译成日语。
+
+效果截图：
+
+![效果截图](screenshot.png)
 
 ## 功能特性
 
@@ -12,7 +16,7 @@
 
 ## 系统要求
 
-- Rime 输入法框架
+- RIME 输入法框架
 - Ollama 服务 (本地运行)
 
 ## 安装步骤
@@ -32,23 +36,19 @@
    ollama pull gemma3:1b
    ```
 
-3. **配置 Rime**
-   - 将 `rime-ollama-translator.lua` 复制到你的 Rime 配置目录
-   - 在你的 Rime 配置文件中添加以下内容：
+3. **配置 RIME**
+   - 将 `rime_ollama_translator.lua` 复制到你的 RIME 配置目录下的`lua`目录中
+   - 在你的 RIME 配置文件中添加以下内容 (以下是使用RIME ICE的方式)：
 
    ```yaml
    # 在你的输入方案配置文件中添加
    filters:
-     - lua_translator@ollama_translator
-   
-   # 确保 lua 模块被加载
-   lua_load:
-     - ollama_translator
+     - lua_filter@*rime_ollama_translator
    ```
 
 ## 配置选项
 
-在 `rime-ollama-translator.lua` 文件中，你可以修改以下配置：
+在 `rime_ollama_translator.lua` 文件中，你可以修改以下配置：
 
 ```lua
 local config = {
@@ -64,60 +64,12 @@ local config = {
 
 ## 使用方法
 
-1. 启动 Rime 输入法
+1. 启动 RIME 输入法
 2. 输入中文文本
 3. 当输入长度达到配置的最小长度时，会自动显示日语翻译候选
-4. 翻译结果会以 🌐 图标标识，出现在候选列表的第二位
+4. 翻译结果会以 图标标识，出现在候选列表的第二位
 
 ## 支持的模型
 
 理论上支持任何 Ollama 模型，推荐使用：
-- `gemma3:1b` (默认，轻量快速)
-- `qwen2.5:1.5b` (中文友好)
-- `llama3.2:1b` (通用性强)
-
-## 故障排除
-
-### 常见问题
-
-1. **翻译不工作**
-   - 检查 Ollama 服务是否正在运行
-   - 确认模型已下载 (`ollama list`)
-
-2. **响应缓慢**
-   - 尝试使用更小的模型
-   - 调整 `timeout` 参数
-   - 检查系统资源使用情况
-
-3. **启用调试日志**
-   - 将配置中的 `debug = false` 改为 `debug = true`
-   - 查看 `/tmp/ollama_translator.log` 文件
-
-### 日志文件
-
-调试日志保存在 `/tmp/rime_ollama_translator.log`，包含：
-- 翻译请求详情
-- API 响应内容
-- 错误信息
-
-## 性能优化
-
-- **缓存机制**: 相同文本的翻译会被缓存，避免重复请求
-- **最小长度限制**: 只翻译达到最小长度的文本，减少无效请求
-- **超时控制**: 防止长时间等待响应
-
-## 许可证
-
-本项目采用 MIT 许可证。
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 更新日志
-
-### v0.1.0
-- 初始版本发布
-- 支持中文到日语翻译
-- 实现缓存机制
-- 添加配置选项 
+- `gemma3:1b`
